@@ -12,47 +12,45 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 public class FirstFragment extends Fragment {
     private static final String TAG = "@@@ Fragment";
+    private int layoutId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_first);
         setHasOptionsMenu(true);
+    }
+
+    private void setContentView(int layoutId) {
+        this.layoutId = layoutId;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView() called with: inflater = [" + inflater + "], container = [" + container + "], savedInstanceState = [" + savedInstanceState + "]");
-        return inflater.inflate(R.layout.fragment_first, container, false);
+        return inflater.inflate(layoutId, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated() called with: view = [" + view + "], savedInstanceState = [" + savedInstanceState + "]");
         super.onViewCreated(view, savedInstanceState);
-    }
+        final Toolbar toolbar = view.findViewById(R.id.first_toolbar);
 
-    @Override
-    public void onDestroyView() {
-        Log.d(TAG, "onDestroyView() called");
-        super.onDestroyView();
-    }
+        final MenuInflater menuInflater = getActivity().getMenuInflater();
+        final Menu menu = toolbar.getMenu();
 
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy() called");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.menu_add).setVisible(false);
+        onCreateOptionsMenu(menu, menuInflater);
+        menu.findItem(R.id.menu_settings).setOnMenuItemClickListener(this::onOptionsItemSelected);
+        menu.findItem(R.id.menu_android).setOnMenuItemClickListener(this::onOptionsItemSelected);
     }
 
     @Override
@@ -66,12 +64,13 @@ public class FirstFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected() called with: item = [" + item + "]");
         Toast.makeText(getActivity(), "Fragment " + item.getTitle(), Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+            case R.id.menu_android:
+                Toast.makeText(getContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onDestroyOptionsMenu() {
-        Log.d(TAG, "onDestroyOptionsMenu() called");
-        super.onDestroyOptionsMenu();
-    }
 }
