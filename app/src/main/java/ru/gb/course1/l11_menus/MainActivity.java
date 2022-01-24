@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "@@@";
+    private static final String TAG = "@@@ Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.button).setOnClickListener(v -> {
-            Toast.makeText(this, "setOnClickListener", Toast.LENGTH_SHORT).show();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_container, new FirstFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
+
     }
 
     @Override
@@ -38,12 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_add:
-                Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.menu_refresh:
-                Toast.makeText(this, item.getTitle() + " onOptionsItemSelected", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.menu_settings:
                 Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
         }
